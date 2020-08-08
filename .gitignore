@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 listfile.txt
 .vscode/launch.json
 .vscode/settings.json
@@ -5,6 +6,8 @@ __pycache__/sftp_lister.cpython-36.pyc
 _sftp_lister.py
 __pycache__/*
 .vscode/*
+=======
+>>>>>>> 2c598cb6579f77208848c4dde65574db38af18b6
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
