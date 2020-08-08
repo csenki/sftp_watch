@@ -6,10 +6,21 @@ from configobj import ConfigObj
 def Diff(li1, li2): 
     return (list(set(li1) - set(li2))) 
 
+if len(sys.argv) < 2:
+    print('First argument the config file need')
+    exit(1)
 conf_file_cmd=sys.argv[1]
-config=ConfigObj(conf_file_cmd)
+try:
+    config=ConfigObj(conf_file_cmd)
+except :
+    print("First argument the config file")
+    if sys.argv[1] != "" :
+        print('Cant open ',sys.argv[1])
+    raise
+
 
 lst=sftp_lister.sftp_file_list()
+#Read config variables
 if config.get('hostname')!="" :
     lst.hostname=config.get('hostname')
 if config.get('password')!="" :
@@ -20,13 +31,18 @@ if config.get('remote_dir')!="" :
     lst.remote_dir=config.get('remote_dir')
 if config.get('port')!="" :        
     lst.Port=config.get('port')
-res=lst.list_dir()
-#for x in res:
-#   print(x)
-#with open('listfile.txt', 'w') as filehandle:
-#    filehandle.writelines("%s\n" % place for place in res)
+
+try:
+    res=lst.list_dir()
+except:
+    print("Cant list directory")
+    raise
+    
+
+
+#Read old list file
 old_list=[]
-with open('listfile.txt', 'r') as filehandle:
+with open(config.get('old_list_file'), 'r') as filehandle:
     filecontents = filehandle.readlines()
     for line in filecontents:
         # remove linebreak which is the last character of the string
@@ -34,4 +50,16 @@ with open('listfile.txt', 'r') as filehandle:
 
         # add item to the list
         old_list.append(current_place)
-print(Diff(res,old_list))
+
+#Compare old and new
+diff=Diff(res,old_list)
+if len(diff)>0 :
+    print('was change')
+
+    #saving changes to list
+    with open(config.get('old_list_file'), 'w') as filehandle:
+     filehandle.writelines("%s\n" % place for place in res)
+    
+else:
+    print('no change')
+
