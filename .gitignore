@@ -3,3 +3,5 @@ listfile.txt
 .vscode/settings.json
 __pycache__/sftp_lister.cpython-36.pyc
 _sftp_lister.py
+__pycache__/*
+.vscode/*
