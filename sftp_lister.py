@@ -35,5 +35,4 @@ class sftp_file_list:
           if (not stat.S_ISDIR(attr.st_mode)) and re_return :
               filelist.append(attr.filename)
       sftp.close()
-      print('ready')
       return filelist
