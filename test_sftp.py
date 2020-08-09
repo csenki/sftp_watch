@@ -1,11 +1,15 @@
 #! python
 import sys
 import sftp_lister
+import email_sender
 from configobj import ConfigObj
 
 def Diff(li1, li2): 
     return (list(set(li1) - set(li2))) 
 
+
+
+exit(0)
 if len(sys.argv) < 2:
     print('First argument the config file need')
     exit(1)
@@ -53,13 +57,19 @@ with open(config.get('old_list_file'), 'r') as filehandle:
 
 #Compare old and new
 diff=Diff(res,old_list)
+
+
 if len(diff)>0 :
     print('was change')
-
+    es=email_sender.email_sender()
+    es.email_to="cstt@opten.hu"
+    es.email_from="cstt@opten.hu"
+    es.email_smtp="mail.opten.hu"
+    es.email_subj="Helló"
+    es.send_email()
     #saving changes to list
     with open(config.get('old_list_file'), 'w') as filehandle:
-     filehandle.writelines("%s\n" % place for place in res)
-    
+        filehandle.writelines("%s\n" % place for place in res)
 else:
     print('no change')
 
